@@ -14,6 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        \App\Models\Gallery::factory(5)->create()->each(function ($gallery) {
+            \App\Models\Image::factory(10)->create(['gallery_id' => $gallery->id]);
+        });
+
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

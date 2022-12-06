@@ -17,7 +17,8 @@ class ImageFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->streetName(),
+            'image_url' => $this->faker->imageUrl(),
         ];
     }
 }
