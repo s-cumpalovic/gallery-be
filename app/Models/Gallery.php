@@ -7,13 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gallery extends Model
 {
+    protected $fillable = [
+        'title',
+        'description',
+    ];
+
     use HasFactory;
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function images(){
+    public function images()
+    {
         return $this->hasMany(Image::class);
     }
+
+    
 }

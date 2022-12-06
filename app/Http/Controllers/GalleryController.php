@@ -2,84 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateGalleryRequest;
 use App\Models\Gallery;
 use Illuminate\Http\Request;
 
 class GalleryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        return Gallery::with('images')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(CreateGalleryRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $gallery = new Gallery();
+        $gallery->title = $validated['title'];
+        $gallery->description = $validated['description'];
+        $gallery->save();
+        
+        return $gallery;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function show($id)
     {
-        //
+        return Gallery::with('images')->find($id);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Gallery  $gallery
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Gallery $gallery)
+    public function update(CreateGalleryRequest $request, $id)
     {
-        //
+        $validated = $request->validated();
+        $gallery = Gallery::find($id);
+        $gallery->title = $validated['title'];
+        $gallery->description = $validated['description'];
+        $gallery->save();
+        
+        return $gallery;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Gallery  $gallery
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Gallery $gallery)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Gallery  $gallery
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Gallery $gallery)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Gallery  $gallery
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Gallery $gallery)
-    {
-        //
+        return Gallery::find($id)->delete();
     }
 }
