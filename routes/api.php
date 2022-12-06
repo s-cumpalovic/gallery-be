@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GalleryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('gallery', GalleryController::class);
+
+Route::controller(AuthController::class)->group(
+    function () {
+        Route::post('register', 'register');
+        Route::post('login', 'login');
+        Route::post('refresh', 'refresh');
+        Route::post('logout', 'logout');
+    }
+);
