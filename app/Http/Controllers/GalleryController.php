@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateGalleryRequest;
 use App\Models\Gallery;
+use App\Models\Image;
 use Illuminate\Http\Request;
 
 class GalleryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Gallery::with('images')->get();
+        return Gallery::with('images')->paginate(10);
     }
 
     public function store(CreateGalleryRequest $request)
@@ -21,7 +22,12 @@ class GalleryController extends Controller
         $gallery->title = $validated['title'];
         $gallery->description = $validated['description'];
         $gallery->save();
-        
+
+        foreach ($request['images'] as $image) {
+            $gallery->images()->save(
+                new Image(['image_url' => $image])
+            );
+        }
         return $gallery;
     }
 
@@ -37,7 +43,7 @@ class GalleryController extends Controller
         $gallery->title = $validated['title'];
         $gallery->description = $validated['description'];
         $gallery->save();
-        
+
         return $gallery;
     }
 
