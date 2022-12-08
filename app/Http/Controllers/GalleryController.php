@@ -11,7 +11,7 @@ class GalleryController extends Controller
 {
     public function index(Request $request)
     {
-        return Gallery::with('images')->paginate(10);
+        return Gallery::with('images', 'user')->paginate(10);
     }
 
     public function store(CreateGalleryRequest $request)
@@ -33,7 +33,7 @@ class GalleryController extends Controller
 
     public function show($id)
     {
-        return Gallery::with('images')->find($id);
+        return Gallery::with(['user','images', 'comments'])->find($id);
     }
 
     public function update(CreateGalleryRequest $request, $id)
