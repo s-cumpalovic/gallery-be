@@ -26,6 +26,8 @@ class CreateGalleryRequest extends FormRequest
         return [
             'title' => 'required|min:2|max:255',
             'description' => 'nullable|max:1000',
+            'user_id' => 'required',
+            'images' => 'required'
         ];
     }
 }

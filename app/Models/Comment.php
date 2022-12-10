@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    protected $fillable = [
+        'body'
+    ];
+
     use HasFactory;
 
     public function gallery()

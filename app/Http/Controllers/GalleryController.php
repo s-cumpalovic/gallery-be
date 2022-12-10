@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateGalleryRequest;
 use App\Models\Gallery;
 use App\Models\Image;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class GalleryController extends Controller
@@ -21,19 +22,21 @@ class GalleryController extends Controller
         $gallery = new Gallery();
         $gallery->title = $validated['title'];
         $gallery->description = $validated['description'];
+        $gallery->user_id = $validated['user_id'];
         $gallery->save();
 
-        foreach ($request['images'] as $image) {
+        foreach ($validated['images'] as $image) {
             $gallery->images()->save(
-                new Image(['image_url' => $image])
+                new Image(['gallery_id' => $gallery->id, 'image_url' => $image])
             );
         }
+
         return $gallery;
     }
 
     public function show($id)
     {
-        return Gallery::with(['user','images', 'comments'])->find($id);
+        return Gallery::with(['user', 'images', 'comments.user'])->find($id);
     }
 
     public function update(CreateGalleryRequest $request, $id)

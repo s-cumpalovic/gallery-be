@@ -9,6 +9,7 @@ class Gallery extends Model
 {
     protected $fillable = [
         'title',
+        'user_id',
         'description',
     ];
 
@@ -24,9 +25,8 @@ class Gallery extends Model
         return $this->hasMany(Image::class);
     }
 
-    public function comments() {
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
-
-    
 }
