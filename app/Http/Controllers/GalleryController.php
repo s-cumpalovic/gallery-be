@@ -12,7 +12,8 @@ class GalleryController extends Controller
 {
     public function index(Request $request)
     {
-        return Gallery::with('images', 'user')->paginate(10);
+        $term = $request->input('term', '');
+        return Gallery::query()->with('images', 'user')->SearchByTerm($term)->paginate(10);
     }
 
     public function store(CreateGalleryRequest $request)
