@@ -31,12 +31,19 @@ class Gallery extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function scopeSearchByTerm($query, $term)
+    public function scopeSearchByTerm($query, $term = '')
     {
         return $query->where('title', 'LIKE', '%' . $term . '%')
             ->orWhere('description', 'LIKE', '%' . $term . '%')
             ->orWhereHas('user', function ($query) use ($term) {
                 return $query->where('first_name', 'LIKE', '%' . $term . '%');
             });
+    }
+
+    public function scopeSearchByUser($query, $userID = '')
+    {
+        return $query->whereHas('user', function ($query) use ($userID) {
+            return $query->where('user_id', '=', $userID);
+        });
     }
 }

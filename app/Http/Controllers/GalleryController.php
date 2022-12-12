@@ -6,6 +6,8 @@ use App\Http\Requests\CreateGalleryRequest;
 use App\Models\Gallery;
 use App\Models\Image;
 use App\Models\Comment;
+use App\Models\User;
+
 use Illuminate\Http\Request;
 
 class GalleryController extends Controller
@@ -13,6 +15,11 @@ class GalleryController extends Controller
     public function index(Request $request)
     {
         $term = $request->input('term', '');
+        $userID = $request->input('userId', '');
+
+        if ($userID) {
+            return Gallery::query()->with('images', 'user')->SearchByUser($userID)->paginate(10);
+        }
         return Gallery::query()->with('images', 'user')->SearchByTerm($term)->paginate(10);
     }
 
