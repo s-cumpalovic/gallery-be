@@ -16,11 +16,11 @@ class GalleryController extends Controller
     {
         $term = $request->input('term', '');
         $userID = $request->input('userId', '');
-
+        $currentPage = $request->input('current_page', 1);
         if ($userID) {
-            return Gallery::query()->with('images', 'user')->SearchByUser($userID)->orderBy('id', 'desc')->paginate(10);
+            return Gallery::query()->with('images', 'user')->SearchByUser($userID)->orderBy('id', 'desc')->paginate(50);
         }
-        return Gallery::query()->with('images', 'user')->SearchByTerm($term)->orderBy('created_at', 'desc')->paginate(10);
+        return Gallery::query()->with('images', 'user')->SearchByTerm($term)->orderBy('created_at', 'desc')->paginate($perPage = 10, $columns = ['*'], $pageName = '', $page = $currentPage);
     }
 
     public function store(CreateGalleryRequest $request)
@@ -55,8 +55,6 @@ class GalleryController extends Controller
 
             return $comment;
         }
-
-
     }
 
     public function show($id)
@@ -75,8 +73,11 @@ class GalleryController extends Controller
         return $gallery;
     }
 
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
+        if ($request->has('comment_id')) {
+            Comment::find($request['comment_id'])->delete();
+        }
         return Gallery::find($id)->delete();
     }
 }
